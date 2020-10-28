@@ -1,0 +1,401 @@
+#+title: LINUX GENERATE COMPILE COMMANDS DATABASE
+#+author: gniuk
+#+email: isgniuk@gmail.com
+#+date: 2020-10-20
+#+OPTIONS: ^:nil
+#+OPTIONS: \n:t
+
+* Prerequisites
+
+** A modern Linux host
+
+   Though Ubuntu 16.04 used here, any modern Linux Distributions should work.
+
+** compiledb
+
+   python2 or python3 compiledb command
+   #+BEGIN_SRC sh
+   $ pip install compiledb
+   #+END_SRC
+
+* Linux 2.0.27
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ mkdir linux-2.0.27 && tar -xvf linux-2.0.27.tar.xz -C linux-2.0.27 --strip-components 1
+     #+END_SRC
+
+  2. make menuconfig
+     #+BEGIN_SRC sh
+     $ make menuconfig
+     #+END_SRC
+     Notice: the path of the ncurses library on your host system may be not at the position as old linux expected.
+     #+BEGIN_SRC sh
+     make -C scripts/lxdialog all
+     -e
+     >> Unable to find the Ncurses libraries.
+     >>
+     >> You must have Ncurses installed in order
+     >> to use 'make menuconfig'
+     Makefile:34: recipe for target 'ncurses' failed
+     #+END_SRC
+     modify scripts/lxdialog/Makefile:29:
+     #+BEGIN_SRC sh
+     all: ncurses lxdialog -> all: lxdialog
+     #+END_SRC
+     then rerun make menuconfig
+
+     #+caption: linux-2.0.27 menuconfig
+     [[file:https://raw.githubusercontent.com/gniuk/linux-compile-commands/master/image/linux-2.0.27_menuconfig.png]]
+
+  3. config the kernel as you need
+
+  4. tune two Makefiles to support dry-run without error
+     #+BEGIN_SRC sh
+          a. fs/Makefile:
+             11 # L_OBJS    = $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
+             12 L_OBJS     =
+
+          b. net/Makefile:
+             52 # L_OBJS             := socket.o protocols.o sysctl_net.o $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
+             53 L_OBJS       := socket.o protocols.o sysctl_net.o
+     #+END_SRC
+
+  5. make dep
+  6. generate build log
+     #+BEGIN_SRC sh
+     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 -j1 bzImage modules --dry-run |& tee build-log.txt
+     #+END_SRC
+     This does not compile the kernel actually, just dryrun.
+
+  7. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+  8. [OPTIONAL], tune compile_commands.json
+
+     Add more general CFLAGS, some index backend engines might need them.
+     #+BEGIN_SRC sh
+     $ sed -i.bak '/m486/a \ \ \ "-march=i386",\n\ \ \ "-m32",' compile_commands.json
+     #+END_SRC
+
+* Linux 2.2.14
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ mkdir linux-2.2.14 && tar -xvf linux-2.2.14.tar.xz -C linux-2.2.14 --strip-components 1
+     #+END_SRC
+  2. make menuconfig
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 menuconfig
+     #+END_SRC
+     Notice: the path of the ncurses library on your host system may be not at the position as old linux expected.
+     #+BEGIN_SRC sh
+     make -C scripts/lxdialog all
+     -e
+     >> Unable to find the Ncurses libraries.
+     >>
+     >> You must have Ncurses installed in order
+     >> to use 'make menuconfig'
+     Makefile:34: recipe for target 'ncurses' failed
+     #+END_SRC
+     modify scripts/lxdialog/Makefile:28:
+     #+BEGIN_SRC sh
+     all: ncurses lxdialog -> all: lxdialog
+     #+END_SRC
+     rerun make ARCH=i386 menuconfig
+
+  3. config the kernel as you need
+  4. make ARCH=i386 dep
+  5. generate build log
+     #+BEGIN_SRC sh
+     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+     #+END_SRC
+     This does not compile the kernel actually, just dryrun.
+
+  6. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+  7. OPTIONAL, tune compile_commands.json
+
+     Add more general CFLAGS, some index backend engines might need them.
+     #+BEGIN_SRC sh
+     $ sed -i.bak '/m486/a \ \ \ "-march=i386",\n\ \ \ "-m32",' compile_commands.json
+     #+END_SRC
+
+* Linux 2.4.0
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ mkdir linux-2.4.0 && tar -xvf linux-2.4.0.tar.xz -C linux-2.4.0 --strip-components 1
+     #+END_SRC
+
+  2. make menuconfig
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 menuconfig
+     #+END_SRC
+
+  3. config the kernel as you need
+  4. make dep
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 dep
+     #+END_SRC
+     ignore the error messages
+
+  5. generate build log
+     #+BEGIN_SRC sh
+     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+     #+END_SRC
+     This does not compile the kernel actually, just dryrun.
+
+  6. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+  7. tune compile_commands.json
+
+     Some index backend engines may not work well using this compile_commands.json,
+     since some CFLAGS needed by modern x86_64 compilers are missing in old kernel config.
+     Add -m32 to the compile_commands.json:
+     #+BEGIN_SRC sh
+     $ sed -i.bak '/march=i686/a \ \ \ "-m32",' compile_commands.json
+     #+END_SRC
+
+* Linux 2.4.18
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ mkdir linux-2.4.18 && tar -xvf linux-2.4.18.tar.xz -C linux-2.4.18 --strip-components 1
+     #+END_SRC
+
+  2. make menuconfig
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 menuconfig
+     #+END_SRC
+
+  3. config the kernel as you need
+
+  4. make dep
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 dep
+     #+END_SRC
+     ignore the error messages
+
+  5. generate build log
+     #+BEGIN_SRC sh
+     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+     #+END_SRC
+     This does not compile the kernel actually, just dryrun.
+
+  6. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+  7. tune compile_commands.json
+
+     Some index backend engines may not work well using this compile_commands.json, since some CFLAGS
+     needed by modern x86_64 compilers are missing in old kernel config.
+     Add -m32 to the compile_commands.json:
+     #+BEGIN_SRC sh
+     $ sed -i.bak '/march=i686/a \ \ \ "-m32",' compile_commands.json
+     #+END_SRC
+
+* Linux 2.6.11
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ mkdir linux-2.6.11 && tar -xvf linux-2.6.11.tar.xz -C linux-2.6.11 --strip-components 1
+     #+END_SRC
+
+  2. make menuconfig
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 menuconfig
+     #+END_SRC
+
+  3. config the kernel as you need
+
+  4. fix a bug in Makefile
+     #+BEGIN_SRC sh
+          drivers/media/dvb/b2c2/Makefile:4: *** missing separator.  Stop.
+          scripts/Makefile.build:311: recipe for target 'drivers/media/dvb/b2c2' failed
+
+            4 # obj-$(CONFIG_DVB_B2C2_USB) + = b2c2-usb.o
+            5 obj-$(CONFIG_DVB_B2C2_USB) += b2c2-usb.o
+     #+END_SRC
+
+  5. generate build log
+     #+BEGIN_SRC sh
+     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
+     #+END_SRC
+     This does not compile the kernel actually, just dryrun.
+     The fail of the final linkage of vmlinux does not matter, since the total compilation has finished.
+
+  6. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+* Linux 2.6.24
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ mkdir linux-2.6.24 && tar -xvf linux-2.6.24.tar.xz -C linux-2.6.24 --strip-components 1
+     #+END_SRC
+
+  2. make menuconfig
+
+     choose ARCH, i386 or x86_64
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 menuconfig
+     #+END_SRC
+     or just use a common default config, and skip step 3.
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 defconfig
+     #+END_SRC
+     Note: The Makefile in src root dir has syntax error using modern make, fix that first.
+     #+BEGIN_SRC sh
+          434 config %config: scripts_basic outputmakefile FORCE
+          435         $(Q)mkdir -p include/linux include/config
+          436         $(Q)$(MAKE) $(build)=scripts/kconfig $@
+
+          -->
+
+          config: scripts_basic outputmakefile FORCE
+                  $(Q)mkdir -p include/linux include/config
+                  $(Q)$(MAKE) $(build)=scripts/kconfig $@
+          %config: scripts_basic outputmakefile FORCE
+                  $(Q)mkdir -p include/linux include/config
+                  $(Q)$(MAKE) $(build)=scripts/kconfig $@
+
+          1506 / %/: prepare scripts FORCE
+          1507         $(cmd_crmodverdir)
+          1508         $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
+          1509         $(build)=$(build-dir)
+
+          -->
+
+          /: prepare scripts FORCE
+                  $(cmd_crmodverdir)
+                  $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
+                  $(build)=$(build-dir)
+          %/: prepare scripts FORCE
+                  $(cmd_crmodverdir)
+                  $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
+                  $(build)=$(build-dir)
+     #+END_SRC
+
+  3. config the kernel as you need
+
+  4. generate build log
+     #+BEGIN_SRC sh
+     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
+     #+END_SRC
+     This does not compile the kernel actually, just dryrun.
+     The fail of the final linkage of vmlinux does not matter, since the total compilation has finished.
+
+  5. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+* Linux 2.6.34
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ mkdir linux-2.6.34 && tar -xvf linux-2.6.34.tar.xz -C linux-2.6.34 --strip-components 1
+     #+END_SRC
+
+  2. make menuconfig
+
+     choose ARCH, i386 or x86_64
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 menuconfig
+     #+END_SRC
+     This config will base on your host's /boot/config of the host kernel.
+
+     or just use a common default config
+     #+BEGIN_SRC sh
+     $ make ARCH=i386 defconfig
+     #+END_SRC
+
+  3. config the kernel as you need
+
+     You may need to make menuconfig again after make defconfig to disable the
+     "Device Drivers -> Graphics support -> Bootup logo", which causes the dryrun fail prematurely.
+     If you want a real compilation of the kernel source, just skip this step after make defconfig.
+
+  4. [OPTIONAL] prepare a real compilation of the kernel if you want
+
+     a. install gcc-4.x multilib to support the compiling, here I use 4.6, 4.9 should be ok, not tested
+
+     b. modify a Makefile to support gcc 4.x to compile
+     #+BEGIN_SRC sh
+     arch/x86/vdso/Makefile
+      28 # VDSO_LDFLAGS_vdso.lds = -m elf_x86_64 -Wl,-soname=linux-vdso.so.1
+      29 VDSO_LDFLAGS_vdso.lds = -m64 -Wl,-soname=linux-vdso.so.1 \
+
+      72 # VDSO_LDFLAGS_vdso32.lds = -m elf_i386 -Wl,-soname=linux-gate.so.1
+      73 VDSO_LDFLAGS_vdso32.lds = -m32 -Wl,-soname=linux-gate.so.1
+     #+END_SRC
+     c. perl scritps may need to be modified to support more recent perl interpreter, e.g.
+     #+BEGIN_SRC sh
+     kernel/timeconst.pl
+      373         # if (!defined(@val)) {
+      374         if (!@val) {
+     #+END_SRC
+
+  5. generate build log
+
+     [a]. do a real compilation of the kernel and get the build log, this requires step[4]
+     #+BEGIN_SRC sh
+     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 CC=gcc-4.6 ARCH=i386 -j4 |& tee build-log.txt
+     #+END_SRC
+     ARCH x86_64 should be the same as i386, the gcc-4.x multilib version
+     should be used if both i386 and x86_64 need to be supported.
+
+     [b]. get the build log using make dryrun
+
+     Before we can dryrun, "Device Drivers -> Graphics support -> Bootup logo" should be disabled
+
+  6. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+* Linux 3.x - latest
+
+  1. The 3.x and 4.x versions should be the same as 2.6.34 above. If
+     dryrun fails, fix the problems or JUST DO A REAL COMPILATION on
+     your host.  The difference may be that the gcc versions used are
+     varied.
+
+  2. Since kernel v5, scripts/gen_compile_commands.py can be used to
+     generate the compile_commands.json natively.  Just compile the
+     kernel, and run the script.  e.g.
+     #+BEGIN_SRC sh
+          $ make ARCH=x86_64 defconfig
+          $ make -j8
+          $ scripts/gen_compile_commands.py
+     #+END_SRC
+
+* Dry-Run vs Real Compilation
+
+  The compile database of a real compilation get all the files
+  involved in the compilation.  The compile database of dry-run might
+  miss some seperate targets despite the all the kernel vmlinux
+  compilation commands generated successfully.  The missing targets
+  are mostly in arch/ARCH/boot/, and some helping tools and scripts.
+  Files in arch/ARCH/boot of ancient kernel source are mostly ASM
+  files, which are not able to be indexed by clang based C/C++
+  indexor. Furthermore, arch/ARCH/boot is relatively independent from
+  the main kernel part and we can examine those code without too much
+  interaction with the big rest part of the kernel. The arch/ARCH/boot
+  of relatively new kernel can be indexed via a real compilation.
+
+  So we consider the compile_commands.json from dry-run a good enough
+  compilation database when indexing ancient kernel source.

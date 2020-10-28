@@ -1,0 +1,562 @@
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o init/main.o init/main.c
+if [ ! -f .version ]; then \
+	echo 1 > .version; \
+else \
+	expr 0`cat .version` + 1 > .version; \
+fi
+if [ -f .name ]; then \
+   echo \#define UTS_VERSION \"\#`cat .version`-`cat .name` `date`\"; \
+ else \
+   echo \#define UTS_VERSION \"\#`cat .version` `date`\";  \
+ fi >> .ver
+echo \#define LINUX_COMPILE_TIME \"`date +%T`\" >> .ver
+echo \#define LINUX_COMPILE_BY \"`whoami`\" >> .ver
+echo \#define LINUX_COMPILE_HOST \"`hostname`\" >> .ver
+if [ -x /bin/dnsdomainname ]; then \
+   echo \#define LINUX_COMPILE_DOMAIN \"`dnsdomainname`\"; \
+ elif [ -x /bin/domainname ]; then \
+   echo \#define LINUX_COMPILE_DOMAIN \"`domainname`\"; \
+ else \
+   echo \#define LINUX_COMPILE_DOMAIN ; \
+ fi >> .ver
+echo \#define LINUX_COMPILER \"`gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -v 2>&1 | tail -1`\" >> .ver
+mv -f .ver include/linux/compile.h
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DUTS_MACHINE='"i386"' -c -o init/version.o init/version.c
+set -e; for i in kernel drivers mm fs net ipc lib arch/i386/kernel arch/i386/mm arch/i386/lib arch/i386/math-emu; do make -C $i; done
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/kernel'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/kernel'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ksyms.o ksyms.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -fno-omit-frame-pointer -c sched.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dma.o dma.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o fork.o fork.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o exec_domain.o exec_domain.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o panic.o panic.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o printk.o printk.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sys.o sys.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o module.o module.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o exit.o exit.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o signal.o signal.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o itimer.o itimer.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o info.o info.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o time.o time.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o softirq.o softirq.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o resource.o resource.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl.o sysctl.c
+rm -f kernel.o
+ld -m elf_i386  -r -o kernel.o ksyms.o sched.o dma.o fork.o exec_domain.o panic.o printk.o sys.o module.o exit.o signal.o itimer.o info.o time.o softirq.o resource.o sysctl.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/kernel'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/kernel'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers'
+set -e; for i in block char net  pci scsi; do make -C $i; done
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/block'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/block'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ll_rw_blk.o ll_rw_blk.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o genhd.o genhd.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o rd.o rd.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o loop.o loop.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ide.o ide.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o rz1000.o rz1000.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o cmd640.o cmd640.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ide-cd.o ide-cd.c
+rm -f block.a
+ar  rcs block.a  ll_rw_blk.o genhd.o rd.o loop.o ide.o rz1000.o cmd640.o ide-cd.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/block'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/block'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/char'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/char'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o serial.o serial.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o tty_io.o tty_io.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o n_tty.o n_tty.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o console.o console.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o tty_ioctl.o tty_ioctl.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o pty.o pty.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vt.o vt.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o mem.o mem.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vc_screen.o vc_screen.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o random.o random.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o consolemap.o consolemap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o selection.o selection.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o keyboard.o keyboard.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o defkeymap.o defkeymap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vga.o vga.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vesa_blank.o vesa_blank.c
+rm -f char.a
+ar  rcs char.a serial.o tty_io.o n_tty.o console.o tty_ioctl.o pty.o vt.o mem.o vc_screen.o random.o consolemap.o selection.o keyboard.o defkeymap.o vga.o vesa_blank.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/char'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/char'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/net'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/net'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ppp.o ppp.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o slhc.o slhc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o auto_irq.o auto_irq.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include  -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c Space.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o net_init.o net_init.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o loopback.o loopback.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o 3c509.o 3c509.c
+rm -f net.a
+ar  rcs net.a ppp.o slhc.o auto_irq.o Space.o net_init.o loopback.o 3c509.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/net'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/net'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/pci'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/pci'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o pci.o pci.c
+rm -f pci.a
+ar  rcs pci.a  pci.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/pci'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/pci'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/scsi'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/scsi'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o scsi_syms.o scsi_syms.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o hosts.o hosts.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o scsi.o scsi.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o scsi_ioctl.o scsi_ioctl.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o constants.o constants.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o scsicam.o scsicam.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o scsi_proc.o scsi_proc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sd.o sd.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sd_ioctl.o sd_ioctl.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sg.o sg.c
+rm -f scsi.a
+ar  rcs scsi.a scsi_syms.o  hosts.o scsi.o scsi_ioctl.o constants.o scsicam.o scsi_proc.o sd.o sd_ioctl.o sg.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/scsi'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/scsi'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers'
+make[2]: Nothing to be done for 'all_targets'.
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/mm'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/mm'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o memory.o memory.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o mmap.o mmap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o filemap.o filemap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o mprotect.o mprotect.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o mlock.o mlock.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o mremap.o mremap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o kmalloc.o kmalloc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vmalloc.o vmalloc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o swap.o swap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vmscan.o vmscan.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o page_io.o page_io.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o page_alloc.o page_alloc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o swap_state.o swap_state.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o swapfile.o swapfile.c
+rm -f mm.o
+ld -m elf_i386  -r -o mm.o  memory.o mmap.o filemap.o mprotect.o mlock.o mremap.o kmalloc.o vmalloc.o swap.o vmscan.o page_io.o page_alloc.o swap_state.o swapfile.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/mm'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/mm'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs'
+set -e; for i in ext2 fat msdos proc isofs nfs; do make -C $i; done
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/ext2'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/ext2'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o acl.o acl.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o balloc.o balloc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o bitmap.o bitmap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dir.o dir.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o file.o file.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o fsync.o fsync.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ialloc.o ialloc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o inode.o inode.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ioctl.o ioctl.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o namei.o namei.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o super.o super.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o symlink.o symlink.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o truncate.o truncate.c
+rm -f ext2.o
+ld -m elf_i386  -r -o ext2.o  acl.o balloc.o bitmap.o dir.o file.o fsync.o ialloc.o inode.o ioctl.o namei.o super.o symlink.o truncate.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/ext2'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/ext2'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/fat'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/fat'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o fatfs_syms.o fatfs_syms.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o buffer.o buffer.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o cache.o cache.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dir.o dir.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o file.o file.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o inode.o inode.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o misc.o misc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o mmap.o mmap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o tables.o tables.c
+rm -f fat.o
+ld -m elf_i386  -r -o fat.o fatfs_syms.o buffer.o cache.o dir.o file.o inode.o misc.o mmap.o tables.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/fat'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/fat'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/msdos'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/msdos'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o msdosfs_syms.o msdosfs_syms.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o namei.o namei.c
+rm -f msdos.o
+ld -m elf_i386  -r -o msdos.o msdosfs_syms.o namei.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/msdos'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/msdos'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/proc'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/proc'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o procfs_syms.o procfs_syms.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o inode.o inode.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o root.o root.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o base.o base.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o mem.o mem.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o link.o link.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o fd.o fd.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o array.o array.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o kmsg.o kmsg.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o net.o net.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o scsi.o scsi.c
+rm -f proc.o
+ld -m elf_i386  -r -o proc.o procfs_syms.o inode.o root.o base.o mem.o link.o fd.o array.o kmsg.o net.o scsi.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/proc'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/proc'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/isofs'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/isofs'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o namei.o namei.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o inode.o inode.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o file.o file.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dir.o dir.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o util.o util.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o rock.o rock.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o symlink.o symlink.c
+rm -f isofs.o
+ld -m elf_i386  -r -o isofs.o  namei.o inode.o file.o dir.o util.o rock.o symlink.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/isofs'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/isofs'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/nfs'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/nfs'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o proc.o proc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sock.o sock.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o rpcsock.o rpcsock.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o inode.o inode.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o file.o file.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o bio.o bio.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o nfsiod.o nfsiod.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dir.o dir.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o symlink.o symlink.c
+rm -f nfs.o
+ld -m elf_i386  -r -o nfs.o  proc.o sock.o rpcsock.o inode.o file.o bio.o nfsiod.o dir.o symlink.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/nfs'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/nfs'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o open.o open.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o read_write.o read_write.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o inode.o inode.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o devices.o devices.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o file_table.o file_table.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o buffer.o buffer.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o super.o super.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o block_dev.o block_dev.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o stat.o stat.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o exec.o exec.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o pipe.o pipe.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o namei.o namei.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o fcntl.o fcntl.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ioctl.o ioctl.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o readdir.o readdir.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o select.o select.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o fifo.o fifo.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o locks.o locks.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o filesystems.o filesystems.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dcache.o dcache.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o binfmt_elf.o binfmt_elf.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o binfmt_script.o binfmt_script.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o noquot.o noquot.c
+rm -f fs.o
+ld -m elf_i386  -r -o fs.o  open.o read_write.o inode.o devices.o file_table.o buffer.o super.o  block_dev.o stat.o exec.o pipe.o namei.o fcntl.o ioctl.o readdir.o select.o fifo.o locks.o filesystems.o dcache.o binfmt_elf.o binfmt_script.o  noquot.o
+rm -f filesystems.a
+ar  rcs filesystems.a  
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net'
+set -e; for i in core ethernet unix 802 ipv4 bridge; do make -C $i; done
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/core'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/core'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sock.o sock.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o skbuff.o skbuff.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o iovec.o iovec.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o datagram.o datagram.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl_net_core.o sysctl_net_core.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dev.o dev.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o dev_mcast.o dev_mcast.c
+rm -f core.o
+ld -m elf_i386  -r -o core.o  sock.o skbuff.o iovec.o datagram.o sysctl_net_core.o dev.o dev_mcast.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/core'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/core'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/ethernet'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/ethernet'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o eth.o eth.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl_net_ether.o sysctl_net_ether.c
+rm -f ethernet.o
+ld -m elf_i386  -r -o ethernet.o  eth.o sysctl_net_ether.o 
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/ethernet'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/ethernet'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/unix'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/unix'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o af_unix.o af_unix.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o garbage.o garbage.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl_net_unix.o sysctl_net_unix.c
+rm -f unix.o
+ld -m elf_i386  -r -o unix.o  af_unix.o garbage.o sysctl_net_unix.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/unix'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/unix'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/802'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/802'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o p8023.o p8023.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl_net_802.o sysctl_net_802.c
+rm -f 802.o
+ld -m elf_i386  -r -o 802.o  p8023.o sysctl_net_802.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/802'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/802'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/ipv4'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/ipv4'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o utils.o utils.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o route.o route.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o proc.o proc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o timer.o timer.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o protocol.o protocol.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o packet.o packet.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ip_input.o ip_input.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ip_fragment.o ip_fragment.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ip_forward.o ip_forward.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ip_options.o ip_options.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ip_output.o ip_output.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ip_sockglue.o ip_sockglue.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o tcp.o tcp.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o tcp_input.o tcp_input.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o tcp_output.o tcp_output.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o tcp_timer.o tcp_timer.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o raw.o raw.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o udp.o udp.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o arp.o arp.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o icmp.o icmp.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o devinet.o devinet.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o af_inet.o af_inet.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o igmp.o igmp.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ip_fw.o ip_fw.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl_net_ipv4.o sysctl_net_ipv4.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o rarp.o rarp.c
+rm -f ipv4.o
+ld -m elf_i386  -r -o ipv4.o  utils.o route.o proc.o timer.o protocol.o packet.o ip_input.o ip_fragment.o ip_forward.o ip_options.o ip_output.o ip_sockglue.o tcp.o tcp_input.o tcp_output.o tcp_timer.o raw.o udp.o arp.o icmp.o devinet.o af_inet.o igmp.o ip_fw.o sysctl_net_ipv4.o rarp.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/ipv4'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/ipv4'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/bridge'
+make all_targets
+make[3]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/bridge'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o br.o br.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o br_tree.o br_tree.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl_net_bridge.o sysctl_net_bridge.c
+rm -f bridge.o
+ld -m elf_i386  -r -o bridge.o  br.o br_tree.o sysctl_net_bridge.o
+make[3]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/bridge'
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/bridge'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o netsyms.o netsyms.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o socket.o socket.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o protocols.o protocols.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sysctl_net.o sysctl_net.c
+rm -f network.a
+ar  rcs network.a netsyms.o socket.o protocols.o sysctl_net.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/ipc'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/ipc'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o util.o util.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o msg.o msg.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sem.o sem.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o shm.o shm.c
+rm -f ipc.o
+ld -m elf_i386  -r -o ipc.o  util.o msg.o sem.o shm.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/ipc'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/ipc'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/lib'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/lib'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o errno.o errno.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ctype.o ctype.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o string.o string.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vsprintf.o vsprintf.c
+rm -f lib.a
+ar  rcs lib.a  errno.o ctype.o string.o vsprintf.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/lib'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/lib'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/kernel'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o process.o process.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o signal.o signal.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -traditional -c entry.S -o entry.o
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o traps.o traps.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o irq.o irq.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o vm86.o vm86.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o bios32.o bios32.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ptrace.o ptrace.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ioport.o ioport.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ldt.o ldt.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o setup.o setup.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o time.o time.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o sys_i386.o sys_i386.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o ksyms.o ksyms.c
+rm -f kernel.o
+ld -m elf_i386  -r -o kernel.o  process.o signal.o entry.o traps.o irq.o vm86.o bios32.o ptrace.o ioport.o ldt.o setup.o time.o sys_i386.o ksyms.o
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -traditional -c head.S -o head.o
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/kernel'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/mm'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/mm'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o init.o init.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o fault.o fault.c
+rm -f mm.o
+ld -m elf_i386  -r -o mm.o  init.o fault.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/mm'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/mm'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/lib'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/lib'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586  -c -o checksum.o checksum.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -traditional -c semaphore.S -o semaphore.o
+rm -f lib.a
+ar  rcs lib.a  checksum.o semaphore.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/lib'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/lib'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/math-emu'
+make all_targets
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/math-emu'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o fpu_entry.o fpu_entry.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c div_small.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o errors.o errors.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o fpu_arith.o fpu_arith.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o fpu_aux.o fpu_aux.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o fpu_etc.o fpu_etc.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o fpu_trig.o fpu_trig.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o load_store.o load_store.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o get_address.o get_address.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o poly_atan.o poly_atan.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o poly_l2.o poly_l2.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o poly_2xm1.o poly_2xm1.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o poly_sin.o poly_sin.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o poly_tan.o poly_tan.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o reg_add_sub.o reg_add_sub.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o reg_compare.o reg_compare.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o reg_constant.o reg_constant.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o reg_ld_str.o reg_ld_str.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c reg_div.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DPARANOID  -fno-builtin  -DPARANOID  -fno-builtin   -c -o reg_mul.o reg_mul.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c reg_norm.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c reg_u_add.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c reg_u_div.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c reg_u_mul.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c reg_u_sub.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c reg_round.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c wm_shrx.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c wm_sqrt.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c div_Xsig.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c polynom_Xsig.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c round_Xsig.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c shr_Xsig.S
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -D__ASSEMBLY__ -DPARANOID -c mul_Xsig.S
+rm -f math.a
+ar  rcs math.a  fpu_entry.o div_small.o errors.o fpu_arith.o fpu_aux.o fpu_etc.o fpu_trig.o load_store.o get_address.o poly_atan.o poly_l2.o poly_2xm1.o poly_sin.o poly_tan.o reg_add_sub.o reg_compare.o reg_constant.o reg_ld_str.o reg_div.o reg_mul.o reg_norm.o reg_u_add.o reg_u_div.o reg_u_mul.o reg_u_sub.o reg_round.o wm_shrx.o wm_sqrt.o div_Xsig.o polynom_Xsig.o round_Xsig.o shr_Xsig.o mul_Xsig.o
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/math-emu'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/math-emu'
+ld -m elf_i386 -Ttext 0x100000 -e stext arch/i386/kernel/head.o init/main.o init/version.o \
+	arch/i386/kernel/kernel.o arch/i386/mm/mm.o kernel/kernel.o mm/mm.o fs/fs.o ipc/ipc.o net/network.a \
+	fs/filesystems.a \
+	drivers/block/block.a drivers/char/char.a drivers/net/net.a drivers/scsi/scsi.a drivers/pci/pci.a arch/i386/math-emu/math.a \
+	/home/gniuk/osdev/linux-2.0.27/arch/i386/lib/lib.a /home/gniuk/osdev/linux-2.0.27/lib/lib.a /home/gniuk/osdev/linux-2.0.27/arch/i386/lib/lib.a -o vmlinux
+nm vmlinux | grep -v '\(compiled\)\|\(\.o$\)\|\( a \)' | sort > System.map
+make -C arch/i386/boot bzImage
+set -e; \
+for i in kernel drivers mm fs net ipc lib arch/i386/kernel arch/i386/mm arch/i386/lib arch/i386/math-emu; \
+do make -C $i CFLAGS="-Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE" MAKING_MODULES=1 modules; \
+done
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/kernel'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/kernel'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers'
+set -e; for i in block char net  scsi; do make -C $i modules; done
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/block'
+rm -f $TOPDIR/modules/BLOCK_MODULES
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/block'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/char'
+make[2]: Nothing to be done for 'modules'.
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/char'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/net'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o bsd_comp.o bsd_comp.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include  -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE -c dummy.c
+rm -f $TOPDIR/modules/NET_MODULES
+echo   bsd_comp.o dummy.o >> $TOPDIR/modules/NET_MODULES
+echo drivers/net/
+cd $TOPDIR/modules; for i in   bsd_comp.o dummy.o; do \
+    ln -sf ../drivers/net//$i .; done
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/net'
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/drivers/scsi'
+rm -f $TOPDIR/modules/SCSI_MODULES
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers/scsi'
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/drivers'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/mm'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/mm'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs'
+set -e; for i in minix; do make -C $i modules; done
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/fs/minix'
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o bitmap.o bitmap.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o truncate.o truncate.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o namei.o namei.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o inode.o inode.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o file.o file.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o dir.o dir.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o symlink.o symlink.c
+gcc -D__KERNEL__ -I/home/gniuk/osdev/linux-2.0.27/include -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strength-reduce -pipe -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2 -DCPU=586 -DMODULE  -c -o fsync.o fsync.c
+rm -f minix.o
+ld -m elf_i386  -r -o minix.o  bitmap.o truncate.o namei.o inode.o file.o dir.o symlink.o fsync.o
+echo fs/minix/
+cd $TOPDIR/modules; for i in  minix.o; do \
+    ln -sf ../fs/minix//$i .; done
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs/minix'
+rm -f $TOPDIR/modules/FS_MODULES
+for i in minix; do \
+    echo `basename $i`.o >> $TOPDIR/modules/FS_MODULES; done
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/fs'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net'
+set -e; for i in ipv4; do make -C $i modules; done
+make[2]: Entering directory '/home/gniuk/osdev/linux-2.0.27/net/ipv4'
+rm -f $TOPDIR/modules/IPV4_MODULES
+make[2]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net/ipv4'
+rm -f $TOPDIR/modules/NET_MISC_MODULES
+for i in ipv4; do \
+    echo `basename $i`.o >> $TOPDIR/modules/NET_MISC_MODULES; done
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/net'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/ipc'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/ipc'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/lib'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/lib'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/kernel'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/kernel'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/mm'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/mm'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/lib'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/lib'
+make[1]: Entering directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/math-emu'
+make[1]: Nothing to be done for 'modules'.
+make[1]: Leaving directory '/home/gniuk/osdev/linux-2.0.27/arch/i386/math-emu'
