@@ -369,10 +369,9 @@
 
 * Linux 3.x - latest
 
-  1. The 3.x and 4.x versions should be the same as 2.6.34 above. If
-     dryrun fails, fix the problems or JUST DO A REAL COMPILATION on
-     your host.  The difference may be that the gcc versions used are
-     varied.
+  1. The 3.x and 4.x versions should be the  same as 2.6.34 above. If dryrun fails, fix the problems
+     or JUST DO A REAL [CROSS] COMPILATION on your host. The difference may be that the gcc versions
+     used are varied.
 
   2. Since kernel v5, scripts/gen_compile_commands.py can be used to
      generate the compile_commands.json natively.  Just compile the
@@ -382,20 +381,49 @@
           $ make -j8
           $ scripts/gen_compile_commands.py
      #+END_SRC
+* Bonus: Linux 0.12
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+     $ tar -xvf linux-0.12.tar.gz
+     #+END_SRC
+
+  2. generate build log
+
+     [a]. use linux-0.12-gen_build_log.sh to generate the build log
+     #+begin_src sh
+     $ cp /PATH/TO/linux-0.12-gen_build_log.sh linux-0.12/
+     $ cd linux-0.12 && bash ./linux-0.12-gen_build_log.sh
+     #+end_src
+
+     [b]. or use linux-0.12-gen_build_log.mk to generate the build log
+     #+begin_src sh
+     $ cp /PATH/TO/linux-0.12-gen_build_log.mk linux-0.12/
+     $ cd linux-0.12 && make -f linux-0.12-gen_build_log.mk |& tee build-log.txt
+     #+end_src
+
+  3. generate compile_commands.json
+     #+BEGIN_SRC sh
+     $ compiledb < build-log.txt
+     #+END_SRC
+
+  4. [OPTIONAL] add -m32
+     #+begin_src sh
+     $ sed -i.bak '/nostdinc/a \ \ \ "-m32",' compile_commands.json
+     #+end_src
 
 * Dry-Run vs Real Compilation
 
   The compile database of a real compilation get all the files
   involved in the compilation.  The compile database of dry-run might
-  miss some seperate targets despite the all the kernel vmlinux
-  compilation commands generated successfully.  The missing targets
-  are mostly in arch/ARCH/boot/, and some helping tools and scripts.
-  Files in arch/ARCH/boot of ancient kernel source are mostly ASM
+  miss some seperate targets despite all the kernel vmlinux compilation
+  commands that successfully generated.  The missing targets
+  are mostly in arch/$ARCH/boot/, and some helping tools and scripts.
+  Files in arch/$ARCH/boot of ancient kernel source are mostly ASM
   files, which are not able to be indexed by clang based C/C++
-  indexor. Furthermore, arch/ARCH/boot is relatively independent from
-  the main kernel part and we can examine those code without too much
-  interaction with the big rest part of the kernel. The arch/ARCH/boot
-  of relatively new kernel can be indexed via a real compilation.
+  indexers. Routines or symbols in the .S asm files can be easily
+  found via grep tools like ripgrep . The arch/$ARCH/boot
+  of relatively new kernels can be indexed via a real compilation.
 
   So we consider the compile_commands.json from dry-run a good enough
   compilation database when indexing ancient kernel source.

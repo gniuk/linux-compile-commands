@@ -1,0 +1,158 @@
+for i in kernel/math kernel/blk_drv kernel/chr_drv kernel mm fs lib; do LANG=en_US.UTF-8 LANGUAGE=en make -C $i V=1 -j1 --dry-run; done
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12/kernel/math'
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o math_emulate.o math_emulate.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o error.o error.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o convert.o convert.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o ea.o ea.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o get_put.o get_put.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o add.o add.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o mul.o mul.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o div.o div.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o compare.o compare.c
+gar rcs math.a math_emulate.o error.o convert.o ea.o get_put.o add.o mul.o div.o compare.o
+sync
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12/kernel/math'
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12/kernel/blk_drv'
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o ll_rw_blk.o ll_rw_blk.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o floppy.o floppy.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o hd.o hd.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o ramdisk.o ramdisk.c
+gar rcs blk_drv.a ll_rw_blk.o floppy.o hd.o ramdisk.o
+sync
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12/kernel/blk_drv'
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12/kernel/chr_drv'
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o tty_io.o tty_io.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o console.o console.c
+gcc -E -nostdinc -I../../include -traditional keyboard.S -o keyboard.s
+gas -c -o keyboard.o keyboard.s
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o serial.o serial.c
+gas -c -o rs_io.o rs_io.s
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o tty_ioctl.o tty_ioctl.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../../include \
+-c -o pty.o pty.c
+gar rcs chr_drv.a tty_io.o console.o keyboard.o serial.o rs_io.o tty_ioctl.o pty.o
+sync
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12/kernel/chr_drv'
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12/kernel'
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o sched.o sched.c
+gas -c -o sys_call.o sys_call.s
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o traps.o traps.c
+gas -c -o asm.o asm.s
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o fork.o fork.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o panic.o panic.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o printk.o printk.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o vsprintf.o vsprintf.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o sys.o sys.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o exit.o exit.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o signal.o signal.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o mktime.o mktime.c
+gld -r -o kernel.o sched.o sys_call.o traps.o asm.o fork.o panic.o printk.o vsprintf.o sys.o exit.o signal.o mktime.o
+sync
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12/kernel'
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12/mm'
+gcc -O -Wall -fstrength-reduce -fcombine-regs -fomit-frame-pointer -finline-functions -nostdinc -I../include \
+-c -o memory.o memory.c
+gcc -O -Wall -fstrength-reduce -fcombine-regs -fomit-frame-pointer -finline-functions -nostdinc -I../include \
+-c -o swap.o swap.c
+gas -o page.o page.s
+gld -r -o mm.o memory.o swap.o page.o
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12/mm'
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12/fs'
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o open.o open.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o read_write.o read_write.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o inode.o inode.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o file_table.o file_table.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o buffer.o buffer.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o super.o super.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o block_dev.o block_dev.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o char_dev.o char_dev.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o file_dev.o file_dev.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o stat.o stat.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o exec.o exec.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o pipe.o pipe.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o namei.o namei.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o bitmap.o bitmap.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o fcntl.o fcntl.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o ioctl.o ioctl.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o truncate.o truncate.c
+gcc -Wall -O -fstrength-reduce -fcombine-regs -fomit-frame-pointer -fno-defer-pop -mstring-insns -nostdinc -I../include \
+-c -o select.o select.c
+gld -r -o fs.o open.o read_write.o inode.o file_table.o buffer.o super.o block_dev.o char_dev.o file_dev.o stat.o exec.o pipe.o namei.o bitmap.o fcntl.o ioctl.o truncate.o select.o
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12/fs'
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12/lib'
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o ctype.o ctype.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o _exit.o _exit.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o open.o open.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o close.o close.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o errno.o errno.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o write.o write.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o dup.o dup.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o setsid.o setsid.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o execve.o execve.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o wait.o wait.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o string.o string.c
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -finline-functions -mstring-insns -nostdinc -I../include \
+-c -o malloc.o malloc.c
+gar rcs lib.a ctype.o _exit.o open.o close.o errno.o write.o dup.o setsid.o execve.o wait.o string.o malloc.o
+sync
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12/lib'
+LANG=en_US.UTF-8 LANGUAGE=en make V=1 -j1 --dry-run init/main.o
+make[1]: Entering directory '/home/gniuk/osdev/linux-0.12'
+gcc  -Wall -O -fstrength-reduce -fomit-frame-pointer -fcombine-regs -mstring-insns \
+-nostdinc -Iinclude -c -o init/main.o init/main.c
+make[1]: Leaving directory '/home/gniuk/osdev/linux-0.12'
