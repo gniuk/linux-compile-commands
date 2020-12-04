@@ -39,7 +39,7 @@
      >> to use 'make menuconfig'
      Makefile:34: recipe for target 'ncurses' failed
      #+END_SRC
-     modify scripts/lxdialog/Makefile:29:
+     To fix it, install ncurses lib via package manager and then modify scripts/lxdialog/Makefile:29 as follows:
      #+BEGIN_SRC sh
      all: ncurses lxdialog -> all: lxdialog
      #+END_SRC
@@ -61,19 +61,18 @@
              53 L_OBJS       := socket.o protocols.o sysctl_net.o
      #+END_SRC
 
-  5. make dep
-  6. generate build log
+  5. generate build log
      #+BEGIN_SRC sh
      $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
-  7. generate compile_commands.json
+  6. generate compile_commands.json
      #+BEGIN_SRC sh
      $ compiledb < build-log.txt
      #+END_SRC
 
-  8. [OPTIONAL], tune compile_commands.json
+  7. [OPTIONAL], tune compile_commands.json
 
      Add more general CFLAGS, some index backend engines might need them.
      #+BEGIN_SRC sh
@@ -107,19 +106,18 @@
      rerun make ARCH=i386 menuconfig
 
   3. config the kernel as you need
-  4. make ARCH=i386 dep
-  5. generate build log
+  4. generate build log
      #+BEGIN_SRC sh
      $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
-  6. generate compile_commands.json
+  5. generate compile_commands.json
      #+BEGIN_SRC sh
      $ compiledb < build-log.txt
      #+END_SRC
 
-  7. OPTIONAL, tune compile_commands.json
+  6. OPTIONAL, tune compile_commands.json
 
      Add more general CFLAGS, some index backend engines might need them.
      #+BEGIN_SRC sh
@@ -139,24 +137,19 @@
      #+END_SRC
 
   3. config the kernel as you need
-  4. make dep
-     #+BEGIN_SRC sh
-     $ make ARCH=i386 dep
-     #+END_SRC
-     ignore the error messages
 
-  5. generate build log
+  4. generate build log
      #+BEGIN_SRC sh
      $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
-  6. generate compile_commands.json
+  5. generate compile_commands.json
      #+BEGIN_SRC sh
      $ compiledb < build-log.txt
      #+END_SRC
 
-  7. tune compile_commands.json
+  6. tune compile_commands.json
 
      Some index backend engines may not work well using this compile_commands.json,
      since some CFLAGS needed by modern x86_64 compilers are missing in old kernel config.
@@ -179,24 +172,18 @@
 
   3. config the kernel as you need
 
-  4. make dep
-     #+BEGIN_SRC sh
-     $ make ARCH=i386 dep
-     #+END_SRC
-     ignore the error messages
-
-  5. generate build log
+  4. generate build log
      #+BEGIN_SRC sh
      $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
-  6. generate compile_commands.json
+  5. generate compile_commands.json
      #+BEGIN_SRC sh
      $ compiledb < build-log.txt
      #+END_SRC
 
-  7. tune compile_commands.json
+  6. tune compile_commands.json
 
      Some index backend engines may not work well using this compile_commands.json, since some CFLAGS
      needed by modern x86_64 compilers are missing in old kernel config.
