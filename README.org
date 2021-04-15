@@ -63,7 +63,7 @@
 
   5. generate build log
      #+BEGIN_SRC sh
-     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 -j1 bzImage modules --dry-run |& tee build-log.txt
+     $ LANGUAGE=en make V=1 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
@@ -108,7 +108,7 @@
   3. config the kernel as you need
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+     $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
@@ -140,7 +140,7 @@
 
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+     $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
@@ -174,7 +174,7 @@
 
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+     $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
@@ -217,7 +217,7 @@
 
   5. generate build log
      #+BEGIN_SRC sh
-     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
+     $ LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
      The fail of the final linkage of vmlinux does not matter, since the total compilation has finished.
@@ -280,7 +280,7 @@
 
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
+     $ LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
      The fail of the final linkage of vmlinux does not matter, since the total compilation has finished.
@@ -340,7 +340,7 @@
 
      [a]. do a real compilation of the kernel and get the build log, this requires step[4]
      #+BEGIN_SRC sh
-     $ LANG=en_US.UTF-8 LANGUAGE=en make V=1 CC=gcc-4.6 ARCH=i386 -j4 |& tee build-log.txt
+     $ LANGUAGE=en make V=1 CC=gcc-4.6 ARCH=i386 -j4 |& tee build-log.txt
      #+END_SRC
      ARCH x86_64 should be the same as i386, the gcc-4.x multilib version
      should be used if both i386 and x86_64 need to be supported.
