@@ -1,17 +1,24 @@
 #!/usr/bin/python3
 
 # Delete files that are not compiled
-# Used for ccls indexed source
+# Used for ccls indexed source and use it before delete_no_srcfiles_dir.sh
 # Usage:
 # 0. Subdirs in arch/ and include/ which are specific to uninterested architectures may deleted manually before carrying on.
-# 1. Choose the directories in delRegex below carefully! Files in these dirs shall be deleted safely.
+# 1. Choose the directories in delRegex below carefully! Files in these dirs should be deleted safely.
 # me=$(whoami); cd ~/osdev/linux-2.0.27/.ccls-cache/@home@${me}@osdev@linux-2.0.27
 # python3 ../../delete_not_compiled_files.py
 
 import os
 import re
 
-delRegex = re.compile(r"(^drivers/|^fs/|^net/)")
+# Test delete arch/other_arch
+# delRegex = re.compile(r"(^arch/)")
+
+# For linux-2.0.27
+# delRegex = re.compile(r"(^drivers/|^fs/|^net/)")
+
+# For linux-5.10.12 or kernel versions which have the same dir structure
+delRegex = re.compile(r"(^block/|^certs/|^crypto/|^drivers/|^fs/|^include/|^init/|^ipc/|^kernel/|^lib/|^mm/|^net/|^security/|^sound/|^virt/)")
 
 reg = re.compile(r".*\.[chS]$")
 
@@ -57,7 +64,7 @@ if __name__ == '__main__':
     # print(srcCodeFiles)
     compiledFiles = replace_at(srcCodeFiles)
     # print(compiledFiles)
-    print(len(compiledFiles))
+    print("compiled files: {}".format(len(compiledFiles)))
     # ========================================
 
     # Get all source files
@@ -74,7 +81,7 @@ if __name__ == '__main__':
         newf = f.replace("./", "")
         filteredSrcFiles.append(newf)
     # print(filteredSrcFiles)
-    print(len(filteredSrcFiles))
+    print("target source files:{}".format(len(filteredSrcFiles)))
     # ========================================
 
     # Before doing the following deletion, we manually deleted subdirs in
@@ -85,7 +92,7 @@ if __name__ == '__main__':
         if f not in compiledFiles and meet_deletion_cond(f):
             toBeDeletedFiles.append(f)
     # print(toBeDeletedFiles)
-    print(len(toBeDeletedFiles))
+    print("to be deleted files: {}".format(len(toBeDeletedFiles)))
     # ========================================
 
     # Now delete files in toBeDeletedFiles
