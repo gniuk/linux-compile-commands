@@ -15,138 +15,200 @@
 
    python2 or python3 compiledb command
    #+BEGIN_SRC sh
-   $ pip install compiledb
+     $ pip install compiledb
    #+END_SRC
 
 * Linux 2.0.27
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ mkdir linux-2.0.27 && tar -xvf linux-2.0.27.tar.xz -C linux-2.0.27 --strip-components 1
+       $ mkdir linux-2.0.27 && tar -xvf linux-2.0.27.tar.xz -C linux-2.0.27 --strip-components 1
      #+END_SRC
 
   2. make menuconfig
      #+BEGIN_SRC sh
-     $ make menuconfig
+       $ make menuconfig
      #+END_SRC
      Notice: the path of the ncurses library on your host system may be not at the position as old linux expected.
      #+BEGIN_SRC sh
-     make -C scripts/lxdialog all
-     -e
-     >> Unable to find the Ncurses libraries.
-     >>
-     >> You must have Ncurses installed in order
-     >> to use 'make menuconfig'
-     Makefile:34: recipe for target 'ncurses' failed
+       make -C scripts/lxdialog all
+       -e
+       >> Unable to find the Ncurses libraries.
+       >>
+       >> You must have Ncurses installed in order
+       >> to use 'make menuconfig'
+       Makefile:34: recipe for target 'ncurses' failed
      #+END_SRC
-     To fix it, install ncurses lib via package manager and then modify scripts/lxdialog/Makefile:29 as follows:
+     To fix it, install ncurses lib via your package manager and then modify scripts/lxdialog/Makefile:29 as follows:
      #+BEGIN_SRC sh
-     all: ncurses lxdialog -> all: lxdialog
+       all: ncurses lxdialog -> all: lxdialog
      #+END_SRC
      then rerun make menuconfig
 
      #+caption: linux-2.0.27 menuconfig
      [[file:https://raw.githubusercontent.com/gniuk/linux-compile-commands/master/image/linux-2.0.27_menuconfig.png]]
 
-  3. config the kernel as you need
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
 
   4. tune two Makefiles to support dry-run without error
      #+BEGIN_SRC sh
-          a. fs/Makefile:
-             11 # L_OBJS    = $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
-             12 L_OBJS     =
+       a. fs/Makefile:
+          11 # L_OBJS    = $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
+          12 L_OBJS     =
 
-          b. net/Makefile:
-             52 # L_OBJS             := socket.o protocols.o sysctl_net.o $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
-             53 L_OBJS       := socket.o protocols.o sysctl_net.o
+       b. net/Makefile:
+          52 # L_OBJS             := socket.o protocols.o sysctl_net.o $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
+          53 L_OBJS       := socket.o protocols.o sysctl_net.o
      #+END_SRC
 
   5. generate build log
      #+BEGIN_SRC sh
-     $ LANGUAGE=en make V=1 -j1 bzImage modules --dry-run |& tee build-log.txt
+       $ LANGUAGE=en make V=1 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
   6. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
   7. [OPTIONAL], tune compile_commands.json
 
      Add more general CFLAGS, some index backend engines might need them.
      #+BEGIN_SRC sh
-     $ sed -i.bak '/m486/a \ \ \ "-march=i386",\n\ \ \ "-m32",' compile_commands.json
+       $ sed -i.bak '/m486/a \ \ \ "-march=i386",\n\ \ \ "-m32",' compile_commands.json
+     #+END_SRC
+
+* Linux 2.0.33
+
+  1. decompress the source tar ball
+     #+BEGIN_SRC sh
+       $ mkdir linux-2.0.33 && tar -xvf linux-2.0.33.tar.xz -C linux-2.0.33 --strip-components 1
+     #+END_SRC
+
+  2. make menuconfig
+     #+BEGIN_SRC sh
+       $ make menuconfig
+     #+END_SRC
+     Notice: the path of the ncurses library on your host system may be not at the position as old linux expected.
+     #+BEGIN_SRC sh
+       make -C scripts/lxdialog all
+       -e
+       >> Unable to find the Ncurses libraries.
+       >>
+       >> You must have Ncurses installed in order
+       >> to use 'make menuconfig'
+       Makefile:34: recipe for target 'ncurses' failed
+     #+END_SRC
+     To fix it, install ncurses lib via your system package manager and then modify scripts/lxdialog/Makefile:29 as follows:
+     #+BEGIN_SRC sh
+       all: ncurses lxdialog -> all: lxdialog
+     #+END_SRC
+     fix a bug in scripts/lxdialog/lxdialog.c:60 before going on
+     #+BEGIN_SRC c
+       const char *title = NULL; -> char *title = NULL;
+     #+END_SRC
+     then rerun make menuconfig
+
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
+
+  4. tune two Makefiles to support dry-run without error
+     #+BEGIN_SRC sh
+       a. fs/Makefile:
+          11 # L_OBJS    = $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
+          12 L_OBJS     =
+
+       b. net/Makefile:
+          52 # L_OBJS             := socket.o protocols.o sysctl_net.o $(join $(SUB_DIRS),$(SUB_DIRS:%=/%.o))
+          53 L_OBJS       := socket.o protocols.o sysctl_net.o
+     #+END_SRC
+
+  5. generate build log
+     #+BEGIN_SRC sh
+       $ LANGUAGE=en make V=1 -j1 bzImage modules --dry-run |& tee build-log.txt
+     #+END_SRC
+     This does not compile the kernel actually, just dryrun.
+
+  6. generate compile_commands.json
+     #+BEGIN_SRC sh
+       $ compiledb < build-log.txt
+     #+END_SRC
+
+  7. [OPTIONAL], tune compile_commands.json
+
+     Add more general CFLAGS, some index backend engines might need them.
+     #+BEGIN_SRC sh
+       $ sed -i.bak '/m486/a \ \ \ "-march=i386",\n\ \ \ "-m32",' compile_commands.json
      #+END_SRC
 
 * Linux 2.2.14
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ mkdir linux-2.2.14 && tar -xvf linux-2.2.14.tar.xz -C linux-2.2.14 --strip-components 1
+       $ mkdir linux-2.2.14 && tar -xvf linux-2.2.14.tar.xz -C linux-2.2.14 --strip-components 1
      #+END_SRC
   2. make menuconfig
      #+BEGIN_SRC sh
-     $ make ARCH=i386 menuconfig
+       $ make ARCH=i386 menuconfig
      #+END_SRC
      Notice: the path of the ncurses library on your host system may be not at the position as old linux expected.
      #+BEGIN_SRC sh
-     make -C scripts/lxdialog all
-     -e
-     >> Unable to find the Ncurses libraries.
-     >>
-     >> You must have Ncurses installed in order
-     >> to use 'make menuconfig'
-     Makefile:34: recipe for target 'ncurses' failed
+       make -C scripts/lxdialog all
+       -e
+       >> Unable to find the Ncurses libraries.
+       >>
+       >> You must have Ncurses installed in order
+       >> to use 'make menuconfig'
+       Makefile:34: recipe for target 'ncurses' failed
      #+END_SRC
      modify scripts/lxdialog/Makefile:28:
      #+BEGIN_SRC sh
-     all: ncurses lxdialog -> all: lxdialog
+       all: ncurses lxdialog -> all: lxdialog
      #+END_SRC
      rerun make ARCH=i386 menuconfig
 
-  3. config the kernel as you need
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+       $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
   5. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
   6. OPTIONAL, tune compile_commands.json
 
      Add more general CFLAGS, some index backend engines might need them.
      #+BEGIN_SRC sh
-     $ sed -i.bak '/m486/a \ \ \ "-march=i386",\n\ \ \ "-m32",' compile_commands.json
+       $ sed -i.bak '/m486/a \ \ \ "-march=i386",\n\ \ \ "-m32",' compile_commands.json
      #+END_SRC
 
 * Linux 2.4.0
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ mkdir linux-2.4.0 && tar -xvf linux-2.4.0.tar.xz -C linux-2.4.0 --strip-components 1
+       $ mkdir linux-2.4.0 && tar -xvf linux-2.4.0.tar.xz -C linux-2.4.0 --strip-components 1
      #+END_SRC
 
   2. make menuconfig
      #+BEGIN_SRC sh
-     $ make ARCH=i386 menuconfig
+       $ make ARCH=i386 menuconfig
      #+END_SRC
 
-  3. config the kernel as you need
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
 
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+       $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
   5. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
   6. tune compile_commands.json
@@ -155,32 +217,32 @@
      since some CFLAGS needed by modern x86_64 compilers are missing in old kernel config.
      Add -m32 to the compile_commands.json:
      #+BEGIN_SRC sh
-     $ sed -i.bak '/march=i686/a \ \ \ "-m32",' compile_commands.json
+       $ sed -i.bak '/march=i686/a \ \ \ "-m32",' compile_commands.json
      #+END_SRC
 
 * Linux 2.4.18
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ mkdir linux-2.4.18 && tar -xvf linux-2.4.18.tar.xz -C linux-2.4.18 --strip-components 1
+       $ mkdir linux-2.4.18 && tar -xvf linux-2.4.18.tar.xz -C linux-2.4.18 --strip-components 1
      #+END_SRC
 
   2. make menuconfig
      #+BEGIN_SRC sh
-     $ make ARCH=i386 menuconfig
+       $ make ARCH=i386 menuconfig
      #+END_SRC
 
-  3. config the kernel as you need
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
 
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
+       $ LANGUAGE=en make V=1 ARCH=i386 -j1 bzImage modules --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
 
   5. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
   6. tune compile_commands.json
@@ -189,128 +251,128 @@
      needed by modern x86_64 compilers are missing in old kernel config.
      Add -m32 to the compile_commands.json:
      #+BEGIN_SRC sh
-     $ sed -i.bak '/march=i686/a \ \ \ "-m32",' compile_commands.json
+       $ sed -i.bak '/march=i686/a \ \ \ "-m32",' compile_commands.json
      #+END_SRC
 
 * Linux 2.6.11
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ mkdir linux-2.6.11 && tar -xvf linux-2.6.11.tar.xz -C linux-2.6.11 --strip-components 1
+       $ mkdir linux-2.6.11 && tar -xvf linux-2.6.11.tar.xz -C linux-2.6.11 --strip-components 1
      #+END_SRC
 
   2. make menuconfig
      #+BEGIN_SRC sh
-     $ make ARCH=i386 menuconfig
+       $ make ARCH=i386 menuconfig
      #+END_SRC
 
-  3. config the kernel as you need
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
 
   4. fix a bug in Makefile
      #+BEGIN_SRC sh
-          drivers/media/dvb/b2c2/Makefile:4: *** missing separator.  Stop.
-          scripts/Makefile.build:311: recipe for target 'drivers/media/dvb/b2c2' failed
+       drivers/media/dvb/b2c2/Makefile:4: *** missing separator.  Stop.
+       scripts/Makefile.build:311: recipe for target 'drivers/media/dvb/b2c2' failed
 
-            4 # obj-$(CONFIG_DVB_B2C2_USB) + = b2c2-usb.o
-            5 obj-$(CONFIG_DVB_B2C2_USB) += b2c2-usb.o
+         4 # obj-$(CONFIG_DVB_B2C2_USB) + = b2c2-usb.o
+         5 obj-$(CONFIG_DVB_B2C2_USB) += b2c2-usb.o
      #+END_SRC
 
   5. generate build log
      #+BEGIN_SRC sh
-     $ LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
+       $ LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
      The fail of the final linkage of vmlinux does not matter, since the total compilation has finished.
 
   6. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
 * Linux 2.6.24
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ mkdir linux-2.6.24 && tar -xvf linux-2.6.24.tar.xz -C linux-2.6.24 --strip-components 1
+       $ mkdir linux-2.6.24 && tar -xvf linux-2.6.24.tar.xz -C linux-2.6.24 --strip-components 1
      #+END_SRC
 
   2. make menuconfig
 
      choose ARCH, i386 or x86_64
      #+BEGIN_SRC sh
-     $ make ARCH=i386 menuconfig
+       $ make ARCH=i386 menuconfig
      #+END_SRC
      or just use a common default config, and skip step 3.
      #+BEGIN_SRC sh
-     $ make ARCH=i386 defconfig
+       $ make ARCH=i386 defconfig
      #+END_SRC
      Note: The Makefile in src root dir has syntax error using modern make, fix that first.
      #+BEGIN_SRC sh
-          434 config %config: scripts_basic outputmakefile FORCE
-          435         $(Q)mkdir -p include/linux include/config
-          436         $(Q)$(MAKE) $(build)=scripts/kconfig $@
+       434 config %config: scripts_basic outputmakefile FORCE
+       435         $(Q)mkdir -p include/linux include/config
+       436         $(Q)$(MAKE) $(build)=scripts/kconfig $@
 
-          -->
+       -->
 
-          config: scripts_basic outputmakefile FORCE
-                  $(Q)mkdir -p include/linux include/config
-                  $(Q)$(MAKE) $(build)=scripts/kconfig $@
-          %config: scripts_basic outputmakefile FORCE
-                  $(Q)mkdir -p include/linux include/config
-                  $(Q)$(MAKE) $(build)=scripts/kconfig $@
+       config: scripts_basic outputmakefile FORCE
+               $(Q)mkdir -p include/linux include/config
+               $(Q)$(MAKE) $(build)=scripts/kconfig $@
+       %config: scripts_basic outputmakefile FORCE
+               $(Q)mkdir -p include/linux include/config
+               $(Q)$(MAKE) $(build)=scripts/kconfig $@
 
-          1506 / %/: prepare scripts FORCE
-          1507         $(cmd_crmodverdir)
-          1508         $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
-          1509         $(build)=$(build-dir)
+       1506 / %/: prepare scripts FORCE
+       1507         $(cmd_crmodverdir)
+       1508         $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
+       1509         $(build)=$(build-dir)
 
-          -->
+       -->
 
-          /: prepare scripts FORCE
-                  $(cmd_crmodverdir)
-                  $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
-                  $(build)=$(build-dir)
-          %/: prepare scripts FORCE
-                  $(cmd_crmodverdir)
-                  $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
-                  $(build)=$(build-dir)
+       /: prepare scripts FORCE
+               $(cmd_crmodverdir)
+               $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
+               $(build)=$(build-dir)
+       %/: prepare scripts FORCE
+               $(cmd_crmodverdir)
+               $(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
+               $(build)=$(build-dir)
      #+END_SRC
 
-  3. config the kernel as you need
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
 
   4. generate build log
      #+BEGIN_SRC sh
-     $ LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
+       $ LANGUAGE=en make V=1 ARCH=i386 -j1 --dry-run |& tee build-log.txt
      #+END_SRC
      This does not compile the kernel actually, just dryrun.
      The fail of the final linkage of vmlinux does not matter, since the total compilation has finished.
 
   5. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
 * Linux 2.6.34
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ mkdir linux-2.6.34 && tar -xvf linux-2.6.34.tar.xz -C linux-2.6.34 --strip-components 1
+       $ mkdir linux-2.6.34 && tar -xvf linux-2.6.34.tar.xz -C linux-2.6.34 --strip-components 1
      #+END_SRC
 
   2. make menuconfig
 
      choose ARCH, i386 or x86_64
      #+BEGIN_SRC sh
-     $ make ARCH=i386 menuconfig
+       $ make ARCH=i386 menuconfig
      #+END_SRC
      This config will base on your host's /boot/config of the host kernel.
 
      or just use a common default config
      #+BEGIN_SRC sh
-     $ make ARCH=i386 defconfig
+       $ make ARCH=i386 defconfig
      #+END_SRC
 
-  3. config the kernel as you need
+  3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
 
      You may need to make menuconfig again after make defconfig to disable the
      "Device Drivers -> Graphics support -> Bootup logo", which causes the dryrun fail prematurely.
@@ -322,25 +384,25 @@
 
      b. modify a Makefile to support gcc 4.x to compile
      #+BEGIN_SRC sh
-     arch/x86/vdso/Makefile
-      28 # VDSO_LDFLAGS_vdso.lds = -m elf_x86_64 -Wl,-soname=linux-vdso.so.1
-      29 VDSO_LDFLAGS_vdso.lds = -m64 -Wl,-soname=linux-vdso.so.1 \
+       arch/x86/vdso/Makefile
+        28 # VDSO_LDFLAGS_vdso.lds = -m elf_x86_64 -Wl,-soname=linux-vdso.so.1
+        29 VDSO_LDFLAGS_vdso.lds = -m64 -Wl,-soname=linux-vdso.so.1 \
 
-      72 # VDSO_LDFLAGS_vdso32.lds = -m elf_i386 -Wl,-soname=linux-gate.so.1
-      73 VDSO_LDFLAGS_vdso32.lds = -m32 -Wl,-soname=linux-gate.so.1
+        72 # VDSO_LDFLAGS_vdso32.lds = -m elf_i386 -Wl,-soname=linux-gate.so.1
+        73 VDSO_LDFLAGS_vdso32.lds = -m32 -Wl,-soname=linux-gate.so.1
      #+END_SRC
      c. perl scritps may need to be modified to support more recent perl interpreter, e.g.
      #+BEGIN_SRC sh
-     kernel/timeconst.pl
-      373         # if (!defined(@val)) {
-      374         if (!@val) {
+       kernel/timeconst.pl
+        373         # if (!defined(@val)) {
+        374         if (!@val) {
      #+END_SRC
 
   5. generate build log
 
      [a]. do a real compilation of the kernel and get the build log, this requires step[4]
      #+BEGIN_SRC sh
-     $ LANGUAGE=en make V=1 CC=gcc-4.6 ARCH=i386 -j4 |& tee build-log.txt
+       $ LANGUAGE=en make V=1 CC=gcc-4.6 ARCH=i386 -j4 |& tee build-log.txt
      #+END_SRC
      ARCH x86_64 should be the same as i386, the gcc-4.x multilib version
      should be used if both i386 and x86_64 need to be supported.
@@ -351,7 +413,7 @@
 
   6. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
 * Linux 3.x - latest
@@ -364,40 +426,41 @@
      generate the compile_commands.json natively.  Just compile the
      kernel, and run the script.  e.g.
      #+BEGIN_SRC sh
-          $ make ARCH=x86_64 defconfig
-          $ make -j8
-          $ scripts/gen_compile_commands.py
+       $ make ARCH=x86_64 defconfig
+       $ make -j8
+       $ scripts/gen_compile_commands.py
      #+END_SRC
+
 * Bonus: Linux 0.12
 
   1. decompress the source tar ball
      #+BEGIN_SRC sh
-     $ tar -xvf linux-0.12.tar.gz
+       $ tar -xvf linux-0.12.tar.gz
      #+END_SRC
 
   2. generate build log
 
      [a]. use linux-0.12-gen_build_log.sh to generate the build log
-     #+begin_src sh
-     $ cp /PATH/TO/linux-0.12-gen_build_log.sh linux-0.12/
-     $ cd linux-0.12 && bash ./linux-0.12-gen_build_log.sh
-     #+end_src
+     #+BEGIN_SRC sh
+       $ cp /PATH/TO/linux-0.12-gen_build_log.sh linux-0.12/
+       $ cd linux-0.12 && bash ./linux-0.12-gen_build_log.sh
+     #+END_SRC
 
      [b]. or use linux-0.12-gen_build_log.mk to generate the build log
-     #+begin_src sh
-     $ cp /PATH/TO/linux-0.12-gen_build_log.mk linux-0.12/
-     $ cd linux-0.12 && make -f linux-0.12-gen_build_log.mk |& tee build-log.txt
-     #+end_src
+     #+BEGIN_SRC sh
+       $ cp /PATH/TO/linux-0.12-gen_build_log.mk linux-0.12/
+       $ cd linux-0.12 && make -f linux-0.12-gen_build_log.mk |& tee build-log.txt
+     #+END_SRC
 
   3. generate compile_commands.json
      #+BEGIN_SRC sh
-     $ compiledb < build-log.txt
+       $ compiledb < build-log.txt
      #+END_SRC
 
   4. [OPTIONAL] add -m32
-     #+begin_src sh
-     $ sed -i.bak '/nostdinc/a \ \ \ "-m32",' compile_commands.json
-     #+end_src
+     #+BEGIN_SRC sh
+       $ sed -i.bak '/nostdinc/a \ \ \ "-m32",' compile_commands.json
+     #+END_SRC
 
 * Dry-Run vs Real Compilation
 
