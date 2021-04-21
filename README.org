@@ -1,4 +1,4 @@
-#+title: LINUX GENERATE COMPILE COMMANDS DATABASE
+#+title: GENERATE LINUX KERNEL COMPILATION DATABASE
 #+author: gniuk
 #+email: isgniuk@gmail.com
 #+date: 2020-10-20
@@ -43,7 +43,8 @@
      #+BEGIN_SRC sh
        all: ncurses lxdialog -> all: lxdialog
      #+END_SRC
-     then rerun make menuconfig
+     Let gcc find libncurses automatically.
+     Then rerun make menuconfig.
 
      #+caption: linux-2.0.27 menuconfig
      [[file:https://raw.githubusercontent.com/gniuk/linux-compile-commands/master/image/linux-2.0.27_menuconfig.png]]
@@ -72,7 +73,7 @@
        $ compiledb < build-log.txt
      #+END_SRC
 
-  7. [OPTIONAL], tune compile_commands.json
+  7. [OPTIONAL] tune compile_commands.json
 
      Add more general CFLAGS, some index backend engines might need them.
      #+BEGIN_SRC sh
@@ -104,11 +105,12 @@
      #+BEGIN_SRC sh
        all: ncurses lxdialog -> all: lxdialog
      #+END_SRC
-     fix a bug in scripts/lxdialog/lxdialog.c:60 before going on
+     Let gcc find libncurses automatically.
+     Fix a bug in scripts/lxdialog/lxdialog.c:60 before going on.
      #+BEGIN_SRC c
        const char *title = NULL; -> char *title = NULL;
      #+END_SRC
-     then rerun make menuconfig
+     Then rerun make menuconfig.
 
   3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
 
@@ -134,7 +136,7 @@
        $ compiledb < build-log.txt
      #+END_SRC
 
-  7. [OPTIONAL], tune compile_commands.json
+  7. [OPTIONAL] tune compile_commands.json
 
      Add more general CFLAGS, some index backend engines might need them.
      #+BEGIN_SRC sh
@@ -161,11 +163,12 @@
        >> to use 'make menuconfig'
        Makefile:34: recipe for target 'ncurses' failed
      #+END_SRC
-     modify scripts/lxdialog/Makefile:28:
+     To fix it, install ncurses lib via your system package manager and then modify scripts/lxdialog/Makefile:28 as follows:
      #+BEGIN_SRC sh
        all: ncurses lxdialog -> all: lxdialog
      #+END_SRC
-     rerun make ARCH=i386 menuconfig
+     Let gcc find libncurses automatically.
+     Then rerun make ARCH=i386 menuconfig.
 
   3. config the kernel as you want, or use the linux-x.x.x-config in this repo as a basis
   4. generate build log
@@ -179,7 +182,7 @@
        $ compiledb < build-log.txt
      #+END_SRC
 
-  6. OPTIONAL, tune compile_commands.json
+  6. [OPTIONAL] tune compile_commands.json
 
      Add more general CFLAGS, some index backend engines might need them.
      #+BEGIN_SRC sh
