@@ -9,7 +9,7 @@
 
 ** A modern Linux host
 
-   Though Ubuntu 16.04 used here, any modern Linux Distributions should work.
+   Though Ubuntu 16.04 used here, any modern Linux Distributions should work. Tested on Arch Linux.
 
 ** compiledb
 
